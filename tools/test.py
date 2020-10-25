@@ -95,7 +95,7 @@ def main():
                 proc.start()
                 procs.append(proc)
 
-            num_imgs = dict(coco=5000, objects365=30000)
+            num_imgs = dict(cocomini=5000, coco=5000, objects365=30000)
 
             for _ in tqdm(range(num_imgs[cfg.test_dataset["name"]])):
                 result_list.append(result_queue.get())

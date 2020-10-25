@@ -15,8 +15,8 @@ class CustomRetinaNetConfig(models.RetinaNetConfig):
 
         # ------------------------ data cfg -------------------------- #
         self.train_dataset = dict(
-            name="coco",
-            root="cocomini",
+            name="cocomini",
+            root="train",
             ann_file="annotations/cocomini.json",
             remove_images_without_annotations=True,
         )
@@ -24,6 +24,11 @@ class CustomRetinaNetConfig(models.RetinaNetConfig):
         # ------------------------ training cfg ---------------------- #
         self.train_image_short_size = 600
         self.nr_images_epoch = 10000
+        self.test_dataset = dict(
+            name="cocomini",
+            root="val2017",
+            ann_file="annotations/instances_val2017.json",
+        )
 
 
 Net = models.RetinaNet

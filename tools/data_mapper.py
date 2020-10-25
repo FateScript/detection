@@ -10,6 +10,7 @@ from megengine.data.dataset import COCO, Objects365, PascalVOC
 
 data_mapper = dict(
     coco=COCO,
+    cocomini=COCO,
     objects365=Objects365,
     voc=PascalVOC,
 )
