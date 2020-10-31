@@ -10,6 +10,7 @@ import functools
 import importlib
 import math
 import random
+import time
 from collections import defaultdict
 from tabulate import tabulate
 
@@ -181,6 +182,7 @@ class DetEvaluator:
         def pred_func(image, im_info):
             return model(image, im_info)
 
+        self.time = 0
         self.model = model
         self.pred_func = pred_func
 
@@ -238,8 +240,11 @@ class DetEvaluator:
         Returns:
             results boxes: detection model output
         """
+        tic = time.time()
         box_cls, box_delta = self.pred_func(**inputs)
-        # box_cls, box_delta = self.model(**inputs)
+        tok = time.time()
+        self.time = tok - tic
+
         box_cls, box_delta = box_cls.numpy(), box_delta.numpy()
         dtboxes_all = list()
         all_inds = np.where(box_cls > self.model.cfg.test_cls_threshold)

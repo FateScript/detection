@@ -95,7 +95,7 @@ def main():
                 proc.start()
                 procs.append(proc)
 
-            num_imgs = dict(cocomini=5000, coco=5000, objects365=30000)
+            num_imgs = dict(coco=5000, cocomini=5000, objects365=30000)
 
             for _ in tqdm(range(num_imgs[cfg.test_dataset["name"]])):
                 result_list.append(result_queue.get())
@@ -108,6 +108,13 @@ def main():
                 current_network, weight_file, args.dataset_dir,
                 None, None, 1, 0, result_list
             )
+
+        total_time = sum([x["perf_time"] for x in result_list])
+        average_time = total_time / len(result_list)
+        fps = 1.0 / average_time
+        logger.info(
+            "average inference speed: {:.4}s / iter, fps:{:.3}".format(average_time, fps)
+        )
 
         all_results = DetEvaluator.format(result_list, cfg)
         json_path = "log-of-{}/epoch_{}.json".format(
@@ -193,6 +200,7 @@ def worker(
         result = {
             "det_res": pred_res,
             "image_id": int(data[1][2][0].split(".")[0].split("_")[-1]),
+            "perf_time": evaluator.time,
         }
         if world_size > 1:
             result_list.put_nowait(result)
